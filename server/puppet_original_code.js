@@ -3,7 +3,7 @@ const cron = require('node-cron');
 
 const cronSchedule = '* * * * *';
 
-async function scrapeReutersTechNews() {
+async function scrapeSpotify() {
   let count = 0;
   const headlines = [];
   const dates = [];
