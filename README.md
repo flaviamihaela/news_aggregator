@@ -1,4 +1,5 @@
 curl -i http://localhost:8083/connectors
+
 curl -X POST http://localhost:8083/connectors      -H "Content-Type: application/json"      -d '{
            "name": "RssSourceConnectorDemo",
            "config": {
@@ -7,6 +8,7 @@ curl -X POST http://localhost:8083/connectors      -H "Content-Type: application
              "rss.urls": "https://medium.com/feed/@markmanson",
              "topic": "RSS"
            }
+           
 curl -X POST http://localhost:8083/connectors \
      -H "Content-Type: application/json" \
      -d '{
