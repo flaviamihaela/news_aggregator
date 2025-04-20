@@ -3,7 +3,9 @@ curl -i http://localhost:8083/connectors
 curl -s http://localhost:8083/connectors | jq length
 
 
-curl -X POST http://localhost:8083/connectors      -H "Content-Type: application/json"      -d '{
+curl -X POST http://localhost:8083/connectors \
+     -H "Content-Type: application/json" \
+     -d '{
            "name": "RssSourceConnectorDemo",
            "config": {
              "connector.class": "org.kaliy.kafka.connect.rss.RssSourceConnector",
@@ -11,6 +13,8 @@ curl -X POST http://localhost:8083/connectors      -H "Content-Type: application
              "rss.urls": "https://medium.com/feed/@markmanson",
              "topic": "RSS"
            }
+         }'
+
            
 curl -X POST http://localhost:8083/connectors   -H "Content-Type: application/json"   -d '{
         "name": "MongoSinkConnectorDemo",
