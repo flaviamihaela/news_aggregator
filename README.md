@@ -26,6 +26,8 @@ curl -X POST http://localhost:8083/connectors \
              "max.batch.size": "10",
            }
          }'
+         
+
 docker exec kafkacat kafkacat     -b broker:29092     -t RSS     -C -o beginning
 
 curl -X DELETE http://localhost:8083/connectors/RssSourceConnectorDemo
