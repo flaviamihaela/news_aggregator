@@ -12,20 +12,18 @@ curl -X POST http://localhost:8083/connectors      -H "Content-Type: application
              "topic": "RSS"
            }
            
-curl -X POST http://localhost:8083/connectors \
-     -H "Content-Type: application/json" \
-     -d '{
-           "name": "MongoSinkConnectorDemo",
-           "config": {
-             "connector.class": "com.mongodb.kafka.connect.MongoSinkConnector",
-             "tasks.max": "2",
-             "topics": "RSS",
-             "connection.uri": "mongodb+srv://username:password@cluster.mongodb.net/project",
-             "database": "project",
-             "collection": "articles",
-             "max.batch.size": "10",
-           }
-         }'
+curl -X POST http://localhost:8083/connectors   -H "Content-Type: application/json"   -d '{
+        "name": "MongoSinkConnectorDemo",
+        "config": {
+          "connector.class": "com.mongodb.kafka.connect.MongoSinkConnector",
+          "tasks.max": "2",
+          "topics": "RSS",
+          "connection.uri": "mongodb+srv://username:password@clustername.clusternumber.mongodb.net/project",
+          "database": "project",
+          "collection": "articles",
+          "max.batch.size": "10"
+        }
+      }'
          
 
 docker exec kafkacat kafkacat     -b broker:29092     -t RSS     -C -o beginning
