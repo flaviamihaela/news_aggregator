@@ -28,6 +28,13 @@ curl -X POST http://localhost:8083/connectors   -H "Content-Type: application/js
           "max.batch.size": "10"
         }
       }'
+
+OR use this if you want to use additional fields in your mongo schema
+
+curl -X PUT http://localhost:8083/connectors/MongoSinkConnectorDemo/config \
+     -H "Content-Type: application/json" \
+     -d '{"connector.class":"com.mongodb.kafka.connect.MongoSinkConnector","tasks.max":"2","topics":"RSS","connection.uri":"mongodb+srv://flaviamdumitrica:Abc123456789@cluster0.5zbu4sa.mongodb.net/project","database":"project","collection":"articles","max.batch.size":"10","transforms":"AddSource","transforms.AddSource.type":"org.apache.kafka.connect.transforms.InsertField$Value","transforms.AddSource.static.field":"read","transforms.AddSource.static.value":""}'
+
          
 # Inspect Kafka topic through kafkacat
 docker exec kafkacat kafkacat     -b broker:29092     -t RSS     -C -o beginning
