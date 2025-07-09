@@ -22,7 +22,7 @@ curl -X POST http://localhost:8083/connectors   -H "Content-Type: application/js
           "connector.class": "com.mongodb.kafka.connect.MongoSinkConnector",
           "tasks.max": "2",
           "topics": "RSS",
-          "connection.uri": "mongodb+srv://username:password@clustername.clusternumber.mongodb.net/project",
+          "connection.uri": "your_connection_uri",
           "database": "project",
           "collection": "articles",
           "max.batch.size": "10"
