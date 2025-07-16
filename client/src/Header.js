@@ -1,14 +1,17 @@
 import {Link, Route} from "react-router-dom";
 import {useContext, useEffect, useState} from "react";
 import {UserContext} from "./UserContext";
+import { API_BASE } from "./config";
 
 export default function Header() {
-  const [isOpen, setIsOpen] = useState(false);
+  const [isFilterOpen, setIsFilterOpen] = useState(false);
+  const [isReadOpen, setIsReadOpen] = useState(false);
   const {setUserInfo,userInfo} = useContext(UserContext);
   const [categories, setCategories] = useState([]);
+  const readStatuses = ["true", "false"];
   useEffect(() => {
-    fetch('http://localhost:3000/profile', {
-      credentials: 'include',
+    fetch(`${API_BASE}/auth/profile`, {
+      credentials: "include",
     }).then(response => {
       response.json().then(userInfo => {
         setUserInfo(userInfo);
@@ -17,59 +20,103 @@ export default function Header() {
   }, []);
 
   useEffect(() =>{
-     fetch('http://localhost:3000/categorynames', {
-            credentials: 'include',
-        })
-        .then(response => response.json())
-        .then(data => {
-            setCategories(data);
-        });
+    fetch(`${API_BASE}/articles/categories`, {
+        credentials: "include",
+      })
+      .then(response => response.json())
+      .then(data => {
+        setCategories(data);
+      });
   }, []);
 
   function logout() {
-    fetch('http://localhost:3000/logout', {
-      credentials: 'include',
-      method: 'POST',
+    fetch(`${API_BASE}/auth/logout`, {
+      credentials: "include",
+      method: "POST",
     });
     setUserInfo(null);
-    window.location.href = '/';
+    window.location.href = "/";
   }
   
-  const handleToggle = () => {
-    setIsOpen(!isOpen);
+  const handleFilterToggle = () => {
+    if (isFilterOpen) {
+      setIsFilterOpen(false);
+    } else {
+      setIsFilterOpen(true);
+    }
   };
+
+  const handleReadToggle = () => {
+    if (isReadOpen) {
+      setIsReadOpen(false);
+    } else {
+      setIsReadOpen(true);
+    }
+  };
+
 
   const username = userInfo?.username;
 
   return (
     <header>
-      <Link to="/" className="logo">Flash.</Link>
+      <Link to="/" className="logo">sip the drip.</Link>
+      
       <nav>
         {username && (
           <>
+            <Link to="/star" className="link-button">faves.</Link>
+
             <div className="dropdown">
-              <button className={`dropdown-toggle ${isOpen ? 'opened' : ''}`} onClick={handleToggle}>
-                Choose your category
+              <button className={`dropdown-toggle ${isFilterOpen ? "opened" : ""}`} 
+              onClick={handleFilterToggle}
+              disabled={categories.length === 0}
+              >
+                filter.
               </button>
-              {isOpen && categories.length > 0 && (
+              {isFilterOpen && categories.length > 0 && (
                 <ul className="dropdown-menu">
                   {categories.map(category => (
                      <li key={category}>
-                       <Link onClick={() => {window.location.href=`/categories/${category}`}}>
-                         {category}
-                       </Link>
+                        <Link Link to={`categories/${category}`} onClick={() => { setIsFilterOpen(false); }}>
+                          {category}
+                        </Link>
                      </li>
                   ))}
                 </ul>
               )}
             </div>
-            <a className="logout-button" onClick={logout}>Logout ({username})</a>
+
+            <div className="dropdown">
+              <button className={`dropdown-toggle ${isReadOpen ? "opened" : ""}`} 
+              onClick={handleReadToggle}
+              disabled={readStatuses.length === 0}
+              >
+                read.
+              </button>
+              {isReadOpen && (
+                <ul className="dropdown-menu">
+                  {readStatuses.map(status => (
+                     <li key={status}>
+                        <Link to={`read/${status}`} onClick={() => { setIsReadOpen(false); }}>
+                          {status}
+                        </Link>
+                     </li>
+                  ))}
+                </ul>
+              )}
+            </div>
+
+            <Link to="/rss" className="link-button">add.</Link>
+
+            <Link to="/stats" className="link-button">stats.</Link>
+
+            <a className="link-button" onClick={logout}>logout ({username}).</a>
           </>
         )}
         {!username && (
           <>
-            <Link to="/login">Login</Link>
-            <Link to="/register">Register</Link>
+            <Link to="/login" className="link-button">login</Link>
+            <Link to="/register" className="link-button">register</Link>
           </>
         )}
       </nav>

@@ -5,3 +5,7 @@ node_modules/
 # IDE specific files
 .vscode/
 
+# Others
+add-content-category/
+feeds
+puppet_original_code.js

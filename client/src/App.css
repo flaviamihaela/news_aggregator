@@ -1,191 +1,376 @@
-*{
-    box-sizing: border-box;
+/* ========================
+ * Main Box
+ * ======================*/
+
+/* Ensures padding, border are included in element total width/height */
+* {
+  box-sizing: border-box;
 }
-a{
-    cursor: pointer;
+
+/* Base text colour for the entire page */
+body {
+  color: #222;
 }
-body{
-    color: #222;
-}
-img{
-    max-width: 100%;
-}
-main{
-    padding: 10px;
-    max-width: 960px;
+  
+/* Main content wrapper: centred, responsive width with inner padding */
+main {
+    padding: 1.25rem;
+    max-width: 80rem;
     margin: 0 auto;
-}
-header{
-    display:flex;
-    justify-content:space-between;
-    margin-top: 20px;
-    margin-bottom: 50px;
-    align-items: center;
-}
-header a{
-    text-decoration:none;
-    color: inherit;
-}
-header a.logo{
-    font-weight: bold;
-    font-size: 1.5rem;
-}
-header nav{
-    display:flex;
-    gap: 24px;
-}
-
-div.post{
-    display: grid;
-    grid-template-columns: 1fr;
-    gap: 20px;
-    margin-bottom: 30px;
-}
-@media screen and (min-width: 700px) {
-    div.post{
-        grid-template-columns: .9fr 1.1fr;
-    }
-}
-
-div.post div.texts h2{
-    margin:0;
-    font-size: 2rem;
-}
-div.post div.texts a{
-    text-decoration:none;
-    color: inherit;
-}
-div.post p.info{
-    margin:24px 0;
-    color: #888;
-    font-size:1rem;
-    font-weight: bold;
-    display: flex;
-    gap: 10px;
-}
-div.post p.info a.author{
-    color:#333;
-}
-
-form.login, form.register{
-    max-width: 400px;
-    margin: 0 auto;
-}
-input{
     display: block;
-    margin-bottom: 5px;
-    width: 100%;
-    padding: 5px 7px;
-    border: 2px solid #ddd;
-    border-radius: 5px;
-    background-color: #fff;
 }
-button{
-    cursor: pointer;
-    width: 100%;
-    display: block;
-    background-color: #555;
-    border:0;
-    color: #fff;
-    border-radius: 5px;
-    padding: 7px 0;
-}
-form.login h1, form.register h1{
-    text-align: center;
+  
+/* ========================
+ * Header Layout & Styling
+ * ======================*/
+header {
+  display: flex; /* Logo on left, nav on right */
+  justify-content: space-between;
+  align-items: center;
+  margin-block: 1.25rem 3rem;
 }
 
-.dropdown, .nav, header {
-    position: relative;
- }
+/* Remove default link styling inside the header */
+header a {
+  text-decoration: none;
+  color: inherit;
+}
 
-/* Categories button overall design */
-.dropdown-toggle {
-    position: relative;
+/* Site logo  */
+header a.logo {
+  font-weight: bold;
+  font-size: 1.5rem;
+}
+
+/* Horizontal nav list */
+header nav {
+  display: flex;
+  gap: clamp(1rem, 3rem, 1.5rem);/* space between nav links */
+}
+
+.link-button {
     display: inline-block;
-    padding: 8px 8px;
-    font-size: 16px;
+    padding: 0.3rem;
+    font-size: 1rem;
     font-weight: bold;
-    text-align: center;
-    text-decoration: none;
-    background-color:transparent; 
-    color: #000000;
+    background: transparent;
+    color: #000;
     border: none;
-    border-radius: 13px;
+    border-radius: 0.8rem;
     cursor: pointer;
     transition: background-color 0.3s, transform 0.3s;
+  }
+  
+.link-button:hover {
+  background: rgb(93, 82, 255);
+  color: #fff;
+  transform: scale(1.02);
 }
 
-/* Categories button when dropdown is opened */
+.link-button:active {
+  transform: scale(0.98);
+}
+
+/* ========================
+ * Blog post card grid
+ * ======================*/
+
+.post {
+  max-width: 33rem;
+  margin-inline: auto;
+}
+
+/* Post title */
+div.post div.texts h2 {
+  margin: 0;
+  font-size: 2rem;
+}
+
+/* Make post title clickable without default link styles */
+div.post div.texts a {
+  text-decoration: none;
+  color: inherit;
+}
+
+/* Post meta information */
+div.post p.info {
+  margin: 2rem 0;
+  color: #888;
+  font-size: 1rem;
+  font-weight: bold;
+  display: flex;
+  gap: 1rem;
+}
+
+.star-btn {
+  all: unset;
+  cursor: pointer;
+  font-size: 1.3rem;
+  line-height: 1;
+}
+.read-btn {
+  all: unset;
+  cursor: pointer;
+  font-size: 1.3rem;
+  line-height: 1;
+}
+
+div.post p.info a.author {
+    color: #333;
+}
+
+/* ========================
+ * Auth & RSS forms
+ * ======================*/
+
+form.login,
+form.register,
+form.rss {
+    max-width: 70rem;
+    margin: 0 auto;
+}
+
+input {
+    display: block;
+    width: 50%;
+    margin-bottom: 0.5rem;
+    margin-left: auto;
+    margin-right: auto;
+    padding: 0.3rem 0.5rem;
+    border: 0.1rem solid #ddd;
+    border-radius: 0.3rem;
+    background: #fff;
+    font-size: 0.9rem;
+}
+
+button {
+    cursor: pointer;
+    width: 50%;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    background: #555;
+    border: 0;
+    color: #fff;
+    border-radius: 0.3rem;
+    padding: 0.5rem 0;
+}
+
+.xbutton {
+    cursor: crosshair;
+    width: 30%;
+    display: block;
+    background: #aaaaaa7a;
+    color: #c01313;
+}
+
+form h1 {
+    text-align: center;
+}
+
+.feeds-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 1rem;
+    margin-top: 2rem;
+    padding: 0.2rem;
+    list-style: none;
+  }
+  
+.feed-box {
+    background-color: #f0f0f0;
+    padding: 0.6rem 0.6rem;
+    border-radius: 1rem;
+    box-shadow: 0rem 0.2rem 0.4rem rgba(0, 0, 0, 0.1);
+    text-align: center;
+    font-size: 0.9rem;
+    transition: transform 0.2s ease;
+    white-space: nowrap; 
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 0.2rem;
+}
+  
+.feed-box:hover {
+    transform: translateY(-0.1rem);
+    background-color: #e2e2e2;
+}
+  
+.feed-box a {
+    text-decoration: none;
+    color: #333;
+    font-weight: bold;
+    word-break: break-word;
+}
+
+/* ========================
+ * Dropdown & Navigation
+ * ======================*/
+
+.dropdown,
+.nav,
+header {
+  position: relative;
+}
+
+.dropdown-toggle {
+  display: inline-block;
+  width: 100%;
+  padding: 0.48rem;
+  font-size: 1rem;
+  font-weight: bold;
+  background: transparent;
+  color: #000;
+  border: none;
+  border-radius: 0.8rem;
+  cursor: pointer;
+  transition: background-color 0.3s, transform 0.3s;
+}
+
 .dropdown-toggle.opened {
-    background-color: rgb(93, 82, 255); 
-    color: #ffffff;
+  background: rgb(93, 82, 255);
+  color: #fff;  
 }
 
-/* Categories button hover state */
+.dropdown-toggle.closed {
+  background: transparent;
+  color: #000;  
+}
+
 .dropdown-toggle:hover {
-    background-color: rgb(93, 82, 255); 
-    color: #ffffff;
-    transform: scale(1.02); 
+    background-color: rgb(93, 82, 255);
+    color: #fff;
+    transform: scale(1.02);
 }
-
-/* Categories button active state (when it's being clicked) */
+  
 .dropdown-toggle:active {
-    transform: scale(0.98); /* Slightly shrinks the button */
-    background-color: rgb(93, 82, 255); 
-    color: #ffffff;
+  transform: scale(0.98);
+  background: rgb(93, 82, 255);
+  color: #fff;
 }
 
-/* Dropdown menu content */
 .dropdown-menu {
-    left: 0; /* Align to the left of the .dropdown-toggle button */
-    position: absolute;
-    z-index: 1000;
-    margin-top: 0px;
-    background-color:rgba(245, 245, 245, 0.899);
-    padding-right: 70px;
-    padding-bottom: 15px;
-    border-radius: 13px;
-}
-
-.dropdown-menu li:hover {
-    color: rgb(93, 82, 255);
+  position: absolute;
+  top: 100%;
+  left: 0;
+  margin-top: 0.2rem;
+  z-index: 1000;
+  background: rgba(245, 245, 245, 0.95);
+  padding: 0.7rem 1.4rem;
+  border-radius: 1.2rem;
+  box-shadow: 0 0.1rem 0.7rem rgba(0, 0, 0, 0.08);
 }
 
 .dropdown-menu li {
-    list-style-type: none; /* Remove bullet points */
-    font-weight: bold;
-    text-decoration: underline;
-    color: #000000;
-    margin-left: -31px;
+  list-style: none;
+  font-weight: bold;
+  text-decoration: none;
+  color: #000;
+  padding: 0.2rem 0;
+  cursor: pointer;
+  transition: color 0.2s;
 }
 
-/* Logout button overall design */
-.logout-button {
-    display: inline-block;
-    padding: 5px 5px;
-    font-size: 16px;
-    font-weight: bold;
-    text-align: center;
-    text-decoration: none;
-    background-color:transparent; 
-    color: #000000;
-    border: none;
-    border-radius: 13px;
-    cursor: pointer;
-    transition: background-color 0.3s, transform 0.3s;
-
+.dropdown-menu li:hover {
+  color: rgb(93, 82, 255);
+  text-decoration: underline;
 }
 
-/* Categories button hover state */
-.logout-button:hover {
-    background-color: rgb(93, 82, 255); 
-    color: #ffffff;
-    transform: scale(1.02); 
+.dropdown-toggle:disabled {
+  background: #e0e0e0;
+  color: #888;
+  cursor: not-allowed;
+  transform: none;
 }
 
-/* Categories button active state (when it's being clicked) */
-.logout-button:active {
-    transform: scale(0.98); /* Slightly shrinks the button */
+.dropdown-toggle.opened:disabled {
+  background: #e0e0e0;
+  color: #888;
 }
 
- 
+
+/* ========================
+ * Pagination
+ * ======================*/
+.pagination {
+  margin-top: 6rem;
+  margin-left: 30rem;
+  margin-right: 30rem;
+  display: flex;
+  justify-content: center;
+  gap: 2rem;
+  align-items: center;
+  font-family: inherit;
+  flex-wrap: nowrap;
+}
+
+.pagination-info {
+  font-weight: bold;
+  font-size: 1rem;
+  white-space: nowrap;
+}
+
+.pagination-btn {
+  padding: 0.4rem 1rem;
+  font-size: 1rem;
+  font-weight: bold;
+  background: transparent;
+  color: rgb(75, 66, 210);
+  border: none;
+  border-radius: 0.7rem;
+  cursor: pointer;
+  transition: background-color 0.25s, transform 0.25s;
+}
+
+.pagination-btn:hover:not(:disabled) {
+  background: rgb(75, 66, 210);
+  color: #fff;
+  transform: translateY(-0.1rem);
+}
+
+.pagination-btn:active:not(:disabled) {
+  transform: translateY(0);
+}
+
+.pagination-btn:disabled {
+  background: transparent;
+  color: #777;
+  transform: none;
+}
+
+/* ========================
+ * Stats
+ * ======================*/
+.range-container {
+  display: flex;
+  gap: 0.75rem;
+  margin-bottom: 1rem;
+}
+
+/* range buttons */
+.range-btn {
+  padding: 0.5rem 1rem;
+  border: none;
+  border-radius: 0.4rem;
+  cursor: pointer;
+  background: transparent;
+  color: #000;
+}
+
+.range-btn.active {
+  background: #2563eb;
+  color: #fff;
+}
+
+.stats {
+  width: 44rem;
+  margin: 0 auto;
+}
+
+.chart-wrapper {
+  margin: 7rem -8rem 0;
+  text-align: center;
+}
+

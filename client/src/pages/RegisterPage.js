@@ -1,22 +1,27 @@
 import {useState} from "react";
+import { API_BASE } from "../config.js";
 
 export default function RegisterPage() {
-  const [username, setUsername] = useState('');
-  const [password, setPassword] = useState('');
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
+
   async function register(ev) {
     ev.preventDefault();
-    const response = await fetch('http://localhost:3000/register', {
-      method: 'POST',
+
+    const response = await fetch(`${API_BASE}/auth/register`, {
+      method: "POST",
       body: JSON.stringify({username,password}),
-      headers: {'Content-Type':'application/json'},
+      headers: {"Content-Type":"application/json"},
     });
+    
     if (response.status === 200) {
-      alert('registration successful');
+      alert("Registration successful.");
+      window.location.href = "/login";
     } else {
-      alert('registration failed');
+      alert("Registration failed.");
     }
-    window.location.href = '/login';
   }
+  
   return (
     <form className="register" onSubmit={register}>
       <h1>Register</h1>
