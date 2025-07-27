@@ -1,6 +1,11 @@
 # News Aggregator
 
 A full-stack news aggregation application that uses Kafka Connect to fetch RSS feeds and provides a React-based web interface for reading and managing articles.
+<img width="2427" height="1472" alt="image" src="https://github.com/user-attachments/assets/b79dbf84-400b-4e15-b346-57db49da59e2" />
+<img width="2465" height="835" alt="image" src="https://github.com/user-attachments/assets/ca857c54-bbb9-44bc-8b0f-f776a99dc84e" />
+<img width="2581" height="1481" alt="image" src="https://github.com/user-attachments/assets/b4058311-0927-4b48-b6ea-95bdfede295c" />
+<img width="1633" height="646" alt="image" src="https://github.com/user-attachments/assets/6eaa6752-afb1-4866-a3d1-3740ca8d0665" />
+<img width="1901" height="1184" alt="image" src="https://github.com/user-attachments/assets/a67f6ee4-6caa-4eee-91ee-f4fb1b45ddc8" />
 
 ## Overview
 
