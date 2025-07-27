@@ -1,122 +1,155 @@
 # News Aggregator
 
+A full-stack news aggregation application that uses Kafka Connect to fetch RSS feeds and provides a React-based web interface for reading and managing articles.
+
 ## Overview
 
-This project is a full-stack news aggregator platform that collects, processes, and displays articles from various RSS/Atom feeds. It leverages a modern React frontend, a Node.js/Express backend, and a robust Kafka-based data pipeline for ingesting and processing news feeds at scale. The system is designed for extensibility, real-time updates, and user-centric features such as article categorization, starring, and reading statistics.
+This project consists of:
+- **Frontend**: React application with user authentication, article management, and statistics
+- **Backend**: Node.js/Express API with MongoDB integration
+- **Data Pipeline**: Kafka Connect with RSS source connector and MongoDB sink connector
+- **Database**: MongoDB for storing articles and user data
+
+The application allows users to subscribe to RSS feeds, read articles, mark them as read/unread, star favorites, and view reading statistics.
 
 ## Key Features
 
-- **Automated RSS/Atom Feed Ingestion:**  
-  Uses Kafka Connect with a custom RSS Source Connector to continuously poll and ingest articles from multiple feeds.
-- **Scalable Data Pipeline:**  
-  Kafka, Zookeeper, and Schema Registry are orchestrated via Docker Compose for reliable, distributed message processing.
-- **User Authentication & Management:**  
-  Secure registration, login, and session management using JWT, bcrypt, and Express middleware.
-- **Personalized News Dashboard:**  
-  React frontend with routes for categories, starred articles, reading history, and statistics.
-- **Article Management:**  
-  Users can star, mark as read, and browse articles by category or status.
-- **Statistics & Analytics:**  
-  Visualize reading habits and feed statistics using Recharts.
-- **Extensible Architecture:**  
-  Easily add new feeds, connectors, or downstream consumers.
+- **RSS Feed Management**: Add, remove, and manage RSS feed subscriptions
+- **Article Reading**: Browse articles by category, read status, or starred items
+- **User Authentication**: Register, login, and user session management
+- **Reading Statistics**: Track reading habits and view analytics
+- **Real-time Updates**: Kafka-based data pipeline for automatic article fetching
+
+## Dependencies
+
+### Backend (server/)
+- **Express.js** - Web framework
+- **MongoDB/Mongoose** - Database and ODM
+- **JWT** - Authentication
+- **bcrypt** - Password hashing
+- **rss-parser** - RSS feed parsing
+- **node-cron** - Scheduled tasks
+- **Axios** - HTTP client for Kafka Connect API
+
+### Frontend (client/)
+- **React** - UI framework
+- **React Router** - Client-side routing
+- **Styled Components** - CSS-in-JS styling
+- **Recharts** - Data visualization
+- **React GA** - Analytics
+
+### Infrastructure
+- **Kafka Connect** - Data pipeline
+- **MongoDB** - Document database
+- **Docker** - Containerization
 
 ## Run and Build
 
 ### Prerequisites
+- Node.js (v16+)
+- MongoDB
+- Docker and Docker Compose
+- Kafka Connect with RSS connector
 
-- Node.js (v18+ recommended)
-- Docker & Docker Compose
-- (Optional) MongoDB instance if not using Docker
-
-### 1. Start Kafka and Connectors
-
-```sh
-cd kafka
-docker-compose up -d
-```
-This will start Zookeeper, Kafka broker, Schema Registry, Kafka Connect, ksqlDB, and Control Center.
-
-### 2. Start the Backend
-
-```sh
+### Backend Setup
+```bash
 cd server
 npm install
-# Set environment variables in a .env file (see below)
 npm start
 ```
 
-### 3. Start the Frontend
-
-```sh
+### Frontend Setup
+```bash
 cd client
 npm install
 npm start
 ```
-The React app will run on [http://localhost:3000](http://localhost:3000) by default.
-
-### 4. Configure RSS Connectors
-
-Edit or use the sample properties in  
-`kafka/connectors/kaliy-kafka-connect-rss-0.1.1/kaliy-kafka-connect-rss-0.1.1/etc/rss-source-connector-sample.properties`  
-and deploy via Kafka Connect REST API or scripts.
-
-## Dependencies
-
-### Frontend (`client/package.json`)
-
-- React, React Router, Styled Components
-- Recharts (for statistics)
-- react-dropdown, react-ga, web-vitals
-
-### Backend (`server/package.json`)
-
-- Express, Mongoose, dotenv, cors, helmet, morgan
-- bcrypt, jsonwebtoken, cookie-parser
-- puppeteer, rss-parser, node-cron
-
-### Data Pipeline
-
-- Kafka, Zookeeper, Schema Registry, Kafka Connect (Confluent images)
-- Kafka Connect RSS Source Connector
-- MongoDB (for persistent storage)
-
-## Usage & Parameter Tuning
 
 ### Environment Variables
+Create `.env` files in both `server/` and `client/` directories:
 
-#### Backend (`server/.env`)
-
-- `MONGO_URL` – MongoDB connection string
-- `PORT` – (optional) Port for Express server
-
-#### Frontend
-
-- `REACT_APP_API_URL` – (optional) Override API base URL
-
-### Kafka Connect RSS Source Connector
-
-**Key parameters (see [doc/README.md](kafka/connectors/kaliy-kafka-connect-rss-0.1.1/kaliy-kafka-connect-rss-0.1.1/doc/README.md)):**
-
-| Name            | Description                                                        | Type   | Default | Importance |
-|-----------------|--------------------------------------------------------------------|--------|---------|------------|
-| `rss.urls`      | Space-separated, percent-encoded RSS/Atom feed URLs                | string |         | high       |
-| `topic`         | Kafka topic to write to                                            | string |         | high       |
-| `sleep.seconds` | Polling interval in seconds                                        | int    | 60      | medium     |
-
-**Example:**
-```properties
-rss.urls=https%3A%2F%2Fnews.ycombinator.com%2Frss https%3A%2F%2Fwww.reddit.com%2Fr%2Fnews%2F.rss
-topic=rss_topic
-sleep.seconds=120
+**Server (.env)**
+```
+PORT=3000
+MONGODB_URI=your_mongodb_connection_string
+JWT_SECRET=your_jwt_secret
+KAFKA_URL=http://localhost:8083/connectors
+API_URL=http://localhost:3000
 ```
 
-**Tuning Tips:**
-- Increase `sleep.seconds` to reduce polling frequency and load.
-- Use multiple URLs for broader coverage; adjust `tasks.max` for parallelism.
-- Monitor Kafka and MongoDB resource usage for scaling.
+**Client (.env)**
+```
+REACT_APP_API_URL=http://localhost:3000
+```
 
-### Docker Compose
+## Usage / Parameter Tuning
 
-- Adjust resource limits and port mappings in `kafka/docker-compose.yml` as needed.
-- Add or remove services (e.g., ksqlDB, Control Center) based on your use case.
+### Kafka Connect Management
+
+#### Get all connectors
+```bash
+curl -i http://localhost:8083/connectors
+```
+
+#### Get number of connectors 
+```bash
+curl -s http://localhost:8083/connectors | jq length
+```
+
+#### Create a new RSS Source Connector 
+```bash
+curl -X POST http://localhost:8083/connectors \
+     -H "Content-Type: application/json" \
+     -d '{
+           "name": "RssSourceConnectorDemo",
+           "config": {
+             "connector.class": "org.kaliy.kafka.connect.rss.RssSourceConnector",
+             "tasks.max": "2",
+             "rss.urls": "https://medium.com/feed/@markmanson",
+             "topic": "RSS"
+           }
+         }'
+```
+
+#### Create a new Mongo Sink Connector
+```bash
+curl -X PUT \
+  http://localhost:8083/connectors/MongoSinkConnectorDemo/config \
+  -H "Content-Type: application/json" \
+  -d '{
+    "connector.class": "com.mongodb.kafka.connect.MongoSinkConnector",
+    "tasks.max": "2",
+    "topics": "RSS",
+    "connection.uri": "your_mongo_connection_uri",
+    "database": "project",
+    "collection": "articles",
+    "max.batch.size": "10",
+    "transforms": "AddSource",
+    "transforms.AddSource.type": "org.apache.kafka.connect.transforms.InsertField$Value",
+    "transforms.AddSource.static.field": "read",
+    "transforms.AddSource.static.value": ""
+  }'
+```
+
+### Configuration Parameters
+
+#### RSS Source Connector Parameters
+- `tasks.max`: Number of parallel tasks (default: 2)
+- `rss.urls`: Comma-separated list of RSS feed URLs
+- `topic`: Kafka topic name for publishing articles
+
+#### MongoDB Sink Connector Parameters
+- `tasks.max`: Number of parallel tasks (default: 2)
+- `topics`: Kafka topics to consume from
+- `connection.uri`: MongoDB connection string
+- `database`: Target database name
+- `collection`: Target collection name
+- `max.batch.size`: Maximum number of documents per batch (default: 10)
+
+### Troubleshooting
+
+1. **Consumer Offset Issues**: If you delete the MongoDB collection, the connector won't rewrite existing data due to offset tracking. Use the offset reset commands above or restart the entire Docker Compose stack.
+
+2. **Connector State**: Always check connector status before making changes to ensure it's in a healthy state.
+
+3. **Batch Size Tuning**: Adjust `max.batch.size` based on your MongoDB performance and article volume requirements.
